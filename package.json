@@ -1,0 +1,39 @@
+{
+  "name": "liri",
+  "version": "1.0.0",
+  "description": "liri displays latest tweets, spotify song info, or omdb movie info",
+  "main": "liri.js",
+  "scripts": {
+    "test": "node liri.js my-tweets"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jfcurat/liri-node-app-jfc.git"
+  },
+  "keywords": [
+    "liri",
+    "node",
+    "app",
+    "api",
+    "request",
+    "dotenv",
+    "twitter",
+    "tweet",
+    "spotify",
+    "music",
+    "omdb",
+    "movies",
+    "info"
+  ],
+  "author": "jfc",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jfcurat/liri-node-app-jfc/issues"
+  },
+  "homepage": "https://github.com/jfcurat/liri-node-app-jfc#readme",
+  "dependencies": {
+    "node-spotify-api": "^1.0.7",
+    "request": "^2.83.0",
+    "twitter": "^1.7.1"
+  }
+}
