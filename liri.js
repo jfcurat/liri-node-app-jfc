@@ -1,5 +1,7 @@
 // liri.js action
-require('dotenv').config();
+var dotenv = require('dotenv').config();
+console.log(process.env.SPOTIFY_ID);
+
 
 var keys = require('./keys.js');
 var Twitter = require('twitter');
@@ -13,6 +15,8 @@ var spotify = new Spotify(keys.spotify);
 // the action to do, based on user input
 // options = 'my-tweets', 'spotify-this-song', 'movie-this', 'do-what-it-says'
 var action = process.argv[2];
+// the query
+var item = process.argv[3];
 
 // switches to take user input then run necessary fxn
 switch (action) {
