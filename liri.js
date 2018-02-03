@@ -9,6 +9,7 @@ var Spotify = require('node-spotify-api');
 var request = require('request');
 var fs = require('fs');
 
+// getting key info from keys.js
 var twitter = new Twitter(keys.twitter);
 var spotify = new Spotify(keys.spotify);
 
@@ -40,7 +41,19 @@ switch (action) {
 // node liri.js my-tweets
 // display your 20 most recent tweets & when they were created
 function getRecentTweets() {
+  console.log('fuck off');
 
+  twitter.get(
+    'statuses/user_timeline.json', 
+    {screen_name: 'jfcurat', count: 20},
+    function(error, tweets) {
+      if(error) throw error;
+      console.log('holy fuck\! tweets' + (JSON.stringify(tweets, null, 2)));
+      
+      for (i = 0; i < tweets.length; i++) {
+        console.log('this is a fuckin\' tweet\: ' + tweets[i].text);
+      }
+  });
 }
 
 // node liri.js spotify-this-song '<song name>'
