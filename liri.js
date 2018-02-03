@@ -1,8 +1,5 @@
 // liri.js action
 var dotenv = require('dotenv').config();
-console.log(process.env.SPOTIFY_ID);
-
-
 var keys = require('./keys.js');
 var Twitter = require('twitter');
 var Spotify = require('node-spotify-api');
@@ -16,8 +13,10 @@ var spotify = new Spotify(keys.spotify);
 // the action to do, based on user input
 // options = 'my-tweets', 'spotify-this-song', 'movie-this', 'do-what-it-says'
 var action = process.argv[2];
+console.log('action: ' + action);
 // the query
 var item = process.argv[3];
+console.log('item: ' + item);
 
 // switches to take user input then run necessary fxn
 switch (action) {
@@ -41,17 +40,13 @@ switch (action) {
 // node liri.js my-tweets
 // display your 20 most recent tweets & when they were created
 function getRecentTweets() {
-  console.log('fuck off');
-
   twitter.get(
-    'statuses/user_timeline.json', 
+    'statuses/user_timeline.json',
     {screen_name: 'jfcurat', count: 20},
     function(error, tweets) {
       if(error) throw error;
-      console.log('holy fuck\! tweets' + (JSON.stringify(tweets, null, 2)));
-      
       for (i = 0; i < tweets.length; i++) {
-        console.log('this is a fuckin\' tweet\: ' + tweets[i].text);
+        console.log('this is a tweet\: ' + tweets[i].text);
       }
   });
 }
@@ -60,7 +55,12 @@ function getRecentTweets() {
 // show song info: artist(s), song name, priview link, & album
 // if no song provided, default = "The Sign" by Ace of Base
 function getSpotifyInfo() {
-
+  spotify.search({ type: 'track', query: 'Hammer Smashed Face' }, function(err, data) {
+    if (err) {
+      return console.log('Error occurred: ' + err);
+    }
+  console.log(JSON.stringify(data, null, 2));
+  });
 }
 
 // node liri.js movie-this '<movie name>'
