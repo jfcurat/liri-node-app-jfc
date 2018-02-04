@@ -61,8 +61,9 @@ function getSpotifyInfo() {
       if (err) {
         return console.log('Error occurred: ' + err);
       } else {
-        var bullshit = JSON.stringify(data.tracks.items[0].artists, null, 2);
+        var bullshit = JSON.stringify(data.tracks.items[0].artists[0].name, null, 2);
         console.log(bullshit);
+
         //var trackDetails = JSON.parse(data.tracks.items);
         //console.log(trackDetails);
         //console.log(trackDetails[0].artists);
@@ -71,6 +72,7 @@ function getSpotifyInfo() {
         //   console.log(trackDetails[i].name);
         //   console.log(trackDetails[i].artists)
         // }
+
       }
     });
 }
