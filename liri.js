@@ -99,11 +99,18 @@ function getSpotifyInfo() {
 // movie info = title, year, IMDB rating, Rotten Tomatoes rating, production country, language, plot, & actors
 // if no movie provided, default = "Mr. Nobody"
 function getMovieInfo() {
-
+  
 }
 
 // node liri.js do-what-it-says
 // use fs node pkg to take content of random.txt as input to LIRI
 function getRandomTxtInfo() {
-
+  fs.readFile('random.txt', 'utf8', function (error, data) {
+    if (error) {
+      console.log('Error occurred: ' + error);
+    } else {
+      console.log(data);
+    }
+  });
+  console.log('Async file reading action happening. Please wait...');
 }
