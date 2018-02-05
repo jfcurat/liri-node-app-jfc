@@ -99,7 +99,7 @@ function getSpotifyInfo() {
 // movie info = title, year, IMDB rating, Rotten Tomatoes rating, production country, language, plot, & actors
 // if no movie provided, default = "Mr. Nobody"
 function getMovieInfo() {
-  
+
 }
 
 // node liri.js do-what-it-says
@@ -109,7 +109,26 @@ function getRandomTxtInfo() {
     if (error) {
       console.log('Error occurred: ' + error);
     } else {
-      console.log(data);
+      console.log('Data from random.txt: \'' + data + '\'');
+      var splitData = data.split(',');
+      var searchFor = splitData[1];
+      spotify.search(
+        { type: 'track', query: searchFor },
+        function (err, data) {
+          if (err) {
+            return console.log('Error occurred: ' + err);
+          } else {
+            var artistName = JSON.stringify(data.tracks.items[0].artists[0].name, null, 2);
+            console.log('Artist(s): ' + artistName);
+            var songName = JSON.stringify(data.tracks.items[0].name, null, 2);
+            console.log('Song: ' + songName);
+            var albumName = JSON.stringify(data.tracks.items[0].album.name, null, 2);
+            console.log('Album: ' + albumName);
+            var previewLink = JSON.stringify(data.tracks.items[0].preview_url, null, 2);
+            console.log('Preview the Song: ' + previewLink);
+          }
+        }
+      );
     }
   });
   console.log('Async file reading action happening. Please wait...');
