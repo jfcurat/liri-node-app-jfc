@@ -8,9 +8,7 @@ var fs = require('fs');
 var twitter = new Twitter(keys.twitter);
 var spotify = new Spotify(keys.spotify);
 
-// action options = 'my-tweets', 'spotify-this-song', 'movie-this', 'do-what-it-says'
 var action = process.argv[2];
-// the query
 var searchItem = process.argv[3];
 
 switch (action) {
@@ -27,11 +25,11 @@ switch (action) {
     getRandomTxtInfo();
     break;
   default:
-    console.log('You typed something wrong.');
+    console.log('\nOops. You typed something wrong.');
+    console.log('\nOptions are:\n\tmy-tweets for recent tweets,\n\tspotify-this-song \'\<song title\>\' for song info,\n\tmovie-this \'\<movie title\>\' for movie info,\n\tor do-what-it-says to find song info from random.txt file');
     break;
 }
 
-// get tweets
 function getRecentTweets() {
   twitter.get(
     'statuses/user_timeline.json',
@@ -45,7 +43,6 @@ function getRecentTweets() {
   );
 }
 
-// get song info
 function getSpotifyInfo() {
   if (!searchItem) {
     spotify.search(
@@ -55,7 +52,7 @@ function getSpotifyInfo() {
           return console.log('Error occurred: ' + err);
         } else {
           var artistName = JSON.stringify(data.tracks.items[0].artists[0].name, null, 2);
-          console.log('Artist(s): ' + artistName);
+          console.log('\nArtist(s): ' + artistName);
           var songName = JSON.stringify(data.tracks.items[0].name, null, 2);
           console.log('Song: ' + songName);
           var albumName = JSON.stringify(data.tracks.items[0].album.name, null, 2);
@@ -73,7 +70,7 @@ function getSpotifyInfo() {
           return console.log('Error occurred: ' + err);
         } else {
           var artistName = JSON.stringify(data.tracks.items[0].artists[0].name, null, 2);
-          console.log('Artist(s): ' + artistName);
+          console.log('\nArtist(s): ' + artistName);
           var songName = JSON.stringify(data.tracks.items[0].name, null, 2);
           console.log('Song: ' + songName);
           var albumName = JSON.stringify(data.tracks.items[0].album.name, null, 2);
@@ -86,7 +83,6 @@ function getSpotifyInfo() {
   }
 }
 
-// get movie info
 function getMovieInfo() {
   var omdbKey = '2606b86e';
   if (!searchItem) {
@@ -98,7 +94,7 @@ function getMovieInfo() {
       }
     , function (error, response, body) {
         var movieTitle = JSON.stringify(body.Title, null, 2);
-        console.log('Title: ' + movieTitle);
+        console.log('\nTitle: ' + movieTitle);
         var movieYear = JSON.stringify(body.Year, null, 2);
         console.log('Release Year: ' + movieYear);
         var movieImdbRating = JSON.stringify(body.Ratings[0].Value, null, 2);
@@ -119,7 +115,6 @@ function getMovieInfo() {
     );
   } else {
     var movieTitleQuery = '&t=' + searchItem;
-    console.log('the search query string param: ' + movieTitleQuery);
     request(
       {
       method: 'GET'
@@ -128,7 +123,7 @@ function getMovieInfo() {
       }
     , function (error, response, body) {
         var movieTitle = JSON.stringify(body.Title, null, 2);
-        console.log('Title: ' + movieTitle);
+        console.log('\nTitle: ' + movieTitle);
         var movieYear = JSON.stringify(body.Year, null, 2);
         console.log('Release Year: ' + movieYear);
         var movieImdbRating = JSON.stringify(body.Ratings[0].Value, null, 2);
@@ -150,13 +145,12 @@ function getMovieInfo() {
   }
 }
 
-// random.txt song info
 function getRandomTxtInfo() {
   fs.readFile('random.txt', 'utf8', function (error, data) {
     if (error) {
       console.log('Error occurred: ' + error);
     } else {
-      console.log('Data from random.txt: \'' + data + '\'');
+      console.log('\nData from random.txt \= \'' + data + '\'');
       var splitData = data.split(',');
       var searchFor = splitData[1];
       spotify.search(
@@ -166,7 +160,7 @@ function getRandomTxtInfo() {
             return console.log('Error occurred: ' + err);
           } else {
             var artistName = JSON.stringify(data.tracks.items[0].artists[0].name, null, 2);
-            console.log('Artist(s): ' + artistName);
+            console.log('\nArtist(s): ' + artistName);
             var songName = JSON.stringify(data.tracks.items[0].name, null, 2);
             console.log('Song: ' + songName);
             var albumName = JSON.stringify(data.tracks.items[0].album.name, null, 2);
