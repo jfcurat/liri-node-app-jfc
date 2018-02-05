@@ -1,4 +1,3 @@
-// liri.js action
 var dotenv = require('dotenv').config();
 var keys = require('./keys.js');
 var Twitter = require('twitter');
@@ -6,19 +5,14 @@ var Spotify = require('node-spotify-api');
 var request = require('request');
 var fs = require('fs');
 
-// getting key info from keys.js
 var twitter = new Twitter(keys.twitter);
 var spotify = new Spotify(keys.spotify);
 
-// the action to do, based on user input
-// options = 'my-tweets', 'spotify-this-song', 'movie-this', 'do-what-it-says'
+// action options = 'my-tweets', 'spotify-this-song', 'movie-this', 'do-what-it-says'
 var action = process.argv[2];
-console.log('action: ' + action);
 // the query
 var searchItem = process.argv[3];
-console.log('searchItem: ' + searchItem);
 
-// switches to take user input then run necessary fxn
 switch (action) {
   case 'my-tweets':
     getRecentTweets();
@@ -33,12 +27,11 @@ switch (action) {
     getRandomTxtInfo();
     break;
   default:
-    console.log('you typed something wrong.');
+    console.log('You typed something wrong.');
     break;
 }
 
-// node liri.js my-tweets
-// display your 20 most recent tweets & when they were created
+// get tweets
 function getRecentTweets() {
   twitter.get(
     'statuses/user_timeline.json',
@@ -46,19 +39,17 @@ function getRecentTweets() {
     function (error, tweets) {
       if (error) throw error;
       for (i = 0; i < tweets.length; i++) {
-        console.log('\nthis is a tweet\: ' + tweets[i].text);
+        console.log('\nThis is a Tweet\: ' + tweets[i].text);
       }
     }
   );
 }
 
-// node liri.js spotify-this-song '<song name>'
-// show song info: artist(s), song name, preview link, & album
-// if no song provided, default = "The Sign" by Ace of Base (use if/else... if (!searchItem) {aceOfBaseSong} else {use searchItem for spotify api call}
+// get song info
 function getSpotifyInfo() {
   if (!searchItem) {
     spotify.search(
-      { type: 'track', query: 'Careless Whisper' },
+      { type: 'track', query: 'Ace of Base The Sign' },
       function (err, data) {
         if (err) {
           return console.log('Error occurred: ' + err);
@@ -76,7 +67,7 @@ function getSpotifyInfo() {
     );
   } else {
     spotify.search(
-      { type: 'track', query: searchItem }, // change query value to searchItem var later
+      { type: 'track', query: searchItem },
       function (err, data) {
         if (err) {
           return console.log('Error occurred: ' + err);
@@ -95,15 +86,71 @@ function getSpotifyInfo() {
   }
 }
 
-// node liri.js movie-this '<movie name>'
-// movie info = title, year, IMDB rating, Rotten Tomatoes rating, production country, language, plot, & actors
-// if no movie provided, default = "Mr. Nobody"
+// get movie info
 function getMovieInfo() {
-
+  var omdbKey = '2606b86e';
+  if (!searchItem) {
+    request(
+      {
+      method: 'GET'
+      , uri: 'http://www.omdbapi.com/?apikey=' + omdbKey + '&t=Mr.+Nobody'
+      , json: true
+      }
+    , function (error, response, body) {
+        var movieTitle = JSON.stringify(body.Title, null, 2);
+        console.log('Title: ' + movieTitle);
+        var movieYear = JSON.stringify(body.Year, null, 2);
+        console.log('Release Year: ' + movieYear);
+        var movieImdbRating = JSON.stringify(body.Ratings[0].Value, null, 2);
+        console.log('IMDB Rating: ' + movieImdbRating);
+        var movieRotRating = JSON.stringify(body.Ratings[1].Value, null, 2);
+        console.log('Rotten Tomatoes Rating: ' + movieRotRating);
+        var movieCountry = JSON.stringify(body.Country, null, 2);
+        console.log('Production Location(s): ' + movieCountry);
+        var movieLanguage = JSON.stringify(body.Language, null, 2);
+        console.log('Language(s): ' + movieLanguage);
+        var moviePlot = JSON.stringify(body.Plot, null, 2);
+        console.log('Plot Summary: ' + moviePlot);
+        var movieActors = JSON.stringify(body.Actors, null, 2);
+        console.log('Cast: ' + movieActors);
+        var movieTime = JSON.stringify(body.Runtime, null, 2);
+        console.log('Runtime: ' + movieTime);
+      }
+    );
+  } else {
+    var movieTitleQuery = '&t=' + searchItem;
+    console.log('the search query string param: ' + movieTitleQuery);
+    request(
+      {
+      method: 'GET'
+      , uri: 'http://www.omdbapi.com/?apikey=' + omdbKey + movieTitleQuery
+      , json: true
+      }
+    , function (error, response, body) {
+        var movieTitle = JSON.stringify(body.Title, null, 2);
+        console.log('Title: ' + movieTitle);
+        var movieYear = JSON.stringify(body.Year, null, 2);
+        console.log('Release Year: ' + movieYear);
+        var movieImdbRating = JSON.stringify(body.Ratings[0].Value, null, 2);
+        console.log('IMDB Rating: ' + movieImdbRating);
+        var movieRotRating = JSON.stringify(body.Ratings[1].Value, null, 2);
+        console.log('Rotten Tomatoes Rating: ' + movieRotRating);
+        var movieCountry = JSON.stringify(body.Country, null, 2);
+        console.log('Production Location(s): ' + movieCountry);
+        var movieLanguage = JSON.stringify(body.Language, null, 2);
+        console.log('Language(s): ' + movieLanguage);
+        var moviePlot = JSON.stringify(body.Plot, null, 2);
+        console.log('Plot Summary: ' + moviePlot);
+        var movieActors = JSON.stringify(body.Actors, null, 2);
+        console.log('Cast: ' + movieActors);
+        var movieTime = JSON.stringify(body.Runtime, null, 2);
+        console.log('Runtime: ' + movieTime);
+      }
+    );
+  }
 }
 
-// node liri.js do-what-it-says
-// use fs node pkg to take content of random.txt as input to LIRI
+// random.txt song info
 function getRandomTxtInfo() {
   fs.readFile('random.txt', 'utf8', function (error, data) {
     if (error) {
@@ -131,5 +178,4 @@ function getRandomTxtInfo() {
       );
     }
   });
-  console.log('Async file reading action happening. Please wait...');
 }
