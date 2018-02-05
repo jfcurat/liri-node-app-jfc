@@ -48,29 +48,51 @@ function getRecentTweets() {
       for (i = 0; i < tweets.length; i++) {
         console.log('\nthis is a tweet\: ' + tweets[i].text);
       }
-    });
+    }
+  );
 }
 
 // node liri.js spotify-this-song '<song name>'
 // show song info: artist(s), song name, preview link, & album
 // if no song provided, default = "The Sign" by Ace of Base (use if/else... if (!searchItem) {aceOfBaseSong} else {use searchItem for spotify api call}
 function getSpotifyInfo() {
-  spotify.search(
-    { type: 'track', query: searchItem }, // change query value to searchItem var later
-    function (err, data) {
-      if (err) {
-        return console.log('Error occurred: ' + err);
-      } else {
-        var artistName = JSON.stringify(data.tracks.items[0].artists[0].name, null, 2);
-        console.log('Artist(s): ' + artistName);
-        var songName = JSON.stringify(data.tracks.items[0].name, null, 2);
-        console.log('Song: ' + songName);
-        var albumName = JSON.stringify(data.tracks.items[0].album.name, null, 2);
-        console.log('Album: ' + albumName);
-        var previewLink = JSON.stringify(data.tracks.items[0].preview_url, null, 2);
-        console.log('Preview the Song: ' + previewLink);
+  if (!searchItem) {
+    spotify.search(
+      { type: 'track', query: 'Careless Whisper' },
+      function (err, data) {
+        if (err) {
+          return console.log('Error occurred: ' + err);
+        } else {
+          var artistName = JSON.stringify(data.tracks.items[0].artists[0].name, null, 2);
+          console.log('Artist(s): ' + artistName);
+          var songName = JSON.stringify(data.tracks.items[0].name, null, 2);
+          console.log('Song: ' + songName);
+          var albumName = JSON.stringify(data.tracks.items[0].album.name, null, 2);
+          console.log('Album: ' + albumName);
+          var previewLink = JSON.stringify(data.tracks.items[0].preview_url, null, 2);
+          console.log('Preview the Song: ' + previewLink);
+        }
       }
-    });
+    );
+  } else {
+    spotify.search(
+      { type: 'track', query: searchItem }, // change query value to searchItem var later
+      function (err, data) {
+        if (err) {
+          return console.log('Error occurred: ' + err);
+        } else {
+          var artistName = JSON.stringify(data.tracks.items[0].artists[0].name, null, 2);
+          console.log('Artist(s): ' + artistName);
+          var songName = JSON.stringify(data.tracks.items[0].name, null, 2);
+          console.log('Song: ' + songName);
+          var albumName = JSON.stringify(data.tracks.items[0].album.name, null, 2);
+          console.log('Album: ' + albumName);
+          var previewLink = JSON.stringify(data.tracks.items[0].preview_url, null, 2);
+          console.log('Preview the Song: ' + previewLink);
+        }
+      }
+    );
+  }
 }
 
 // node liri.js movie-this '<movie name>'
