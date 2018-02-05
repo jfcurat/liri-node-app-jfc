@@ -37,7 +37,8 @@ function getRecentTweets() {
     function (error, tweets) {
       if (error) throw error;
       for (i = 0; i < tweets.length; i++) {
-        console.log('\nThis is a Tweet\: ' + tweets[i].text);
+        console.log('\nThis is a Tweet\: \"' + tweets[i].text + '\"');
+        console.log('Created: ' + tweets[i].created_at);
       }
     }
   );
